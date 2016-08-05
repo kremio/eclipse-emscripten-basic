@@ -1,11 +1,10 @@
-PROJECT = EmscriptenSetup
+PROJECT = EclipseEmscriptenBasic
 
 #Adapted from https://gist.github.com/funkaster/5199237
 #GNU Make docs: http://www.gnu.org/software/make/manual/make.html
 #Emscripten: http://kripken.github.io/emscripten-site/docs/
 EMSDK_HOME = ~/playground/emscripten/emsdk_portable
 EMSCRIPTEN_HOME = $(EMSDK_HOME)/emscripten/1.35.0
-SYSROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk
 CLANG = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang
 
 SOURCES = $(wildcard */*.cpp) $(wildcard */*.c)
@@ -16,12 +15,12 @@ OBJECTS = $(patsubst %.cpp,%.o,$(patsubst %.c,%.o,$(SOURCES)))
 IGNORE := $(shell bash -c "source  $(EMSDK_HOME)/emsdk_env.sh; env | sed 's/=/:=/' | sed 's/^/export /' > makeenv")                         
 include makeenv 
 
-	
+#This target is broken at the moment. Anyway, it would not make much sense in this example to try to compile a native app	
 set-native:
 	$(eval CXX := $(CLANG) -x c++)
 	$(eval CC := $(CLANG))
 	$(eval CPPFLAGS := -g -O2 -DHAS_TR1)
-	$(eval CXXFLAGS := -v -std=c++11 -stdlib=libc++ -I $(EMSCRIPTEN_HOME)/system/include -I $(CLANG_INCLUDE))
+	$(eval CXXFLAGS := -v -std=c++11 -stdlib=libc++ -I $(EMSCRIPTEN_HOME)/system/include)
 	$(eval LDFLAGS := -lstdc++)
 	$(eval TARGET := native)
 
